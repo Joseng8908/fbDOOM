@@ -39,6 +39,8 @@
 
 #include "p_inter.h"
 
+// 추가
+#include "hw_buzzer.h"
 
 #define BONUSADD	6
 
@@ -874,6 +876,9 @@ P_DamageMobj
 	player->health -= damage; 	// mirror mobj health here for Dave
 	if (player->health < 0)
 	    player->health = 0;
+
+	// 추가
+	HW_Buzzer_Beep(220.0, 150);
 	
 	player->attacker = source;
 	player->damagecount += damage;	// add damage after armor / invuln

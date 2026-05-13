@@ -35,6 +35,9 @@
 
 #include "p_pspr.h"
 
+// 추가
+#include "hw_buzzer.h"
+
 #define LOWERSPEED		FRACUNIT*6
 #define RAISESPEED		FRACUNIT*6
 
@@ -657,6 +660,8 @@ A_FirePistol
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
+	// 추가
+	HW_Buzzer_Beep(880.0, 50);
     S_StartSound (player->mo, sfx_pistol);
 
     P_SetMobjState (player->mo, S_PLAY_ATK2);
@@ -679,6 +684,8 @@ A_FireShotgun
 ( player_t*	player,
   pspdef_t*	psp ) 
 {
+	// 추가
+	HW_Buzzer_Beep(660.0, 80);
     int		i;
 	
     S_StartSound (player->mo, sfx_shotgn);

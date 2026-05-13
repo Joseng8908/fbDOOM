@@ -1,0 +1,71 @@
+============================================================
+d_main.c 수정
+============================================================
+
+--- 상단 include 추가 ---
+#include "hw_serial.h"
+#include "hw_fnd.h"
+#include "hw_lcd.h"
+#include "hw_key.h"
+#include "hw_buzzer.h"
+
+--- D_DoomMain() 맨 끝, D_DoomLoop() 호출 직전에 추가 ---
+    HW_Serial_Init();
+    HW_Buzzer_Init();
+
+--- D_DoomLoop() 안, TryRunTics() 호출 직전에 추가 ---
+        HW_Key_Poll();
+
+============================================================
+p_user.c 수정
+============================================================
+
+--- 상단 include 추가 ---
+#include "hw_fnd.h"
+#include "hw_lcd.h"
+
+--- P_PlayerThink() 안, 함수 끝 부분에 추가 ---
+    // 35틱 = 1초, 매 틱 write()하면 UART 부하
+    extern int gametic;
+    if (gametic % 35 == 0) {
+        HW_FND_Update(player->health);
+        HW_LCD_UpdateHP(player->health);
+    }
+
+============================================================
+p_inter.c 수정
+============================================================
+
+--- 상단 include 추가 ---
+#include "hw_buzzer.h"
+
+--- P_DamageMobj() 안, target->player 체크하는 부분에 추가 ---
+    if (target->player) {
+        HW_Buzzer_Beep(220.0, 150);  // 피격: 낮은 음 150ms
+    }
+
+============================================================
+p_pspr.c 수정
+============================================================
+
+--- 상단 include 추가 ---
+#include "hw_buzzer.h"
+
+--- A_FirePistol() 함수 시작 부분에 추가 ---
+    HW_Buzzer_Beep(880.0, 50);   // 발사: 높은 음 50ms
+
+--- A_FireShotgun() 함수 시작 부분에 추가 ---
+    HW_Buzzer_Beep(660.0, 80);
+
+============================================================
+Makefile 수정
+============================================================
+
+OBJS에 아래 추가:
+    build/hw_fnd.o \
+    build/hw_lcd.o \
+    build/hw_key.o \
+    build/hw_buzzer.o \
+
+LDFLAGS에 추가:
+    -lpthread

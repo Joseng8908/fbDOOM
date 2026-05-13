@@ -75,6 +75,14 @@
 
 #include "d_main.h"
 
+// my header
+#include "hw_serial.h"
+#include "hw_fnd.h"
+#include "hw_lcd.h"
+#include "hw_key.h"
+#include "hw_buzzer.h"
+
+
 //
 // D-DoomLoop()
 // Not a globally visible function,
@@ -421,6 +429,8 @@ void D_DoomLoop (void)
     	G_BeginRecording ();
 
     main_loop_started = true;
+
+	HW_Key_Poll();
 
     TryRunTics();
 
@@ -1834,6 +1844,9 @@ void D_DoomMain (void)
 		else
 			D_StartTitle ();                // start up intro loop
     }
+
+	HW_Serial_Init();
+	HW_Buzzer_Init();
 
     D_DoomLoop ();  // never returns
 }

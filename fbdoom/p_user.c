@@ -28,6 +28,10 @@
 
 #include "doomstat.h"
 
+// my device controller
+#include "hw_fnd.h"
+#include "hw_lcd.h"
+
 
 
 // Index of the special effects (INVUL inverse) map.
@@ -374,6 +378,12 @@ void P_PlayerThink (player_t* player)
     }
     else
 	player->fixedcolormap = 0;
+
+	// 추가
+    if (gametic % 35 == 0) {
+        HW_FND_Update(player->health);
+        HW_LCD_UpdateHP(player->health);
+    }
 }
 
 
